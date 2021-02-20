@@ -8,16 +8,16 @@ function preload() {
   bgImg = loadImage("images/bg.png");
   bricks = loadImage('images/brick.png');
 
-  coinSound = loadSound('sounds/coinSound.mp3');
-  die = loadSound('sounds/dieSound.mp3');
+  coinSound = loadSound('coinSound.mp3');
+  die = loadSound('dieSound.mp3');
 
   marioDead = loadImage('images/dead.png')
-  diamondSound = loadSound('sounds/diamond.mp3');
+  diamondSound = loadSound('diamond.mp3');
 
   coinImage = loadAnimation('images/con1.png', 'images/con2.png', 'images/con3.png', 'images/con4.png', 'images/con5.png', 'images/con6.png');
 
   diamondImage = loadImage("images/diamond.png");
-  bgMusic = loadSound('sounds/bg.mp3')
+  bgMusic = loadSound('bg.mp3')
 }
 
 function setup() {
