@@ -1,5 +1,5 @@
-var bgImg, x1 = 0, x2, scrollSpeed = 4, mario, brickGroup, coinsGroup, coinImage, coinSound, Score = 0, diamondGroup, diamondImage, bgMusic, diamondSound, mushRunning, mushGroup, die,  
-turtleImage, turtleGroup, turtle, marioDead, playing=0; //declaring the variables
+var bgImg, x1 = 0, x2, scrollSpeed = 4, mario, brickGroup, coinsGroup, coinImage, coinSound, Score = 0, diamondGroup, diamondImage, bgMusic, diamondSound, mushRunning, obstacleGroup, die,  
+turtleImage, marioDead, playing=0,gameState = "PLAY"; //declaring the variables
 
 
 function preload() {
@@ -40,9 +40,8 @@ function setup() {
 
   diamondGroup = new Group(); //creating a new diamond 
 
-  mushGroup = new Group(); // creating a new mush group
+  obstacleGroup = new Group(); // creating a new mush group
 
-  turtleGroup = new Group(); // creating a new turtle group
 
 
   ground = createSprite(100, 345, 400, 10); // creating the ground for mario
@@ -51,13 +50,18 @@ function setup() {
 
 
 function draw() {
-
+  if(gameState == "PLAY"){
   // if(playing == 0){
   //   bgMusic.play();
   //   playing =1 ;
   // }
   image(bgImg, x1, 0, width, height); // displaying the background image
   image(bgImg, x2, 0, width, height);
+
+  generateBricks();
+  generateCoins();
+  generateDiamonds();
+  generateObstacles();
   // bgMusic.play();
   if (keyDown("space")) { //Checking if the key down is specabar
     mario.velocityY = -13; //then mario gets an upward velocuiy of 13
@@ -108,53 +112,21 @@ function draw() {
       temp3 = null;
       Score += 10;
     }
+
   }
 
-  // for (var l = 0; l < (mushGroup).length; l++) {
-  //   var temp4 = (mushGroup).get(l);
-
-  //   if (temp4.isTouching(mario)) {
-  //     bgMusic.stop();
-  //     die.play();
-  //     fill(255, 0, 0);
-  //     textSize(40);
-  //     text("     YOU DIED\nFINAL SCORE: " + Score, 250, 200);
-  //     mario.velocityX = 0;
-  //     temp4.velocityX = 0;
-  //     coin.velocityX = 0;
-  //     diamonds.velocityX = 0;
-  //     scrollSpeed = 0;
-  //   }
-  // }
-
-  // for (var m = 0; m < (turtleGroup).length; m++) {
-  //   var temp5 = (turtleGroup).get(m);
-
-  //   if (temp5.isTouching(mario)) {
-  //     bgMusic.stop();
-  //     die.play();
-  //     fill(255, 0, 0);;
-  //     textSize(40);
-  //     text("     YOU DIED\nFINAL SCORE: " + Score, 250, 200);
-  //     mario.velocityX = 0;
-  //     mush.velocityX = 0;
-  //     turtle.velocityX = 0;
-  //     coin.velocityX = 0;
-  //     diamonds.velocityX = 0;
-  //     scrollSpeed = 0;
-  //   }
-  // }
-
+  
+    if (obstacleGroup.isTouching(mario)) {
+      gameState="END";
+      die.play();
+    }
+  }
+  
 //Calling all the required functions 
   drawSprites(); //draws all the sprite
   textSize(20); //makes the size of the text as 20 pixels
   fill(255, 0, 0); // color is red
   text("Score:" + Score, 600, 20); // score at600x and 20y
-  generateBricks();
-  generateCoins();
-  generateDiamonds();
-  generateMush();
-  generateTurtle();
 }
 
 function random(min, max) { // a function to generate random numbers 
@@ -196,23 +168,20 @@ function generateDiamonds() {
 
 }
 //Function to generate Mush
-function generateMush() {
+function generateObstacles() {
   if (frameCount % 100 == 0) {
-    var mush = createSprite(random(1000, 1400), 315, 40, 40);
-    mush.addAnimation("mush", mushRunning);
-    mush.velocityX = -4;
-    mush.scale = 0.1;
-    mushGroup.add(mush);
-  }
+    var obstacles = createSprite(random(1000, 1400), 315, 40, 40);
+    var choice= round
+    (random(0,1));
+    if(choice === 0){
+    obstacles.addAnimation("mush", mushRunning);
+    }
+    else if(choice === 1){
+    obstacles.addAnimation("turtle", turtleImage);
+    }
+    console.log(choice);
+    obstacles.velocityX = -4;
+    obstacles.scale = 0.1;
+    obstacleGroup.add(obstacles);
 }
-
-//Function to generate Turtle
-function generateTurtle() {
-  if (frameCount % 250 == 0) {
-    turtle = createSprite(random(1000, 1400), random(100,300), 40, 40);
-    turtle.addAnimation("turtle", turtleImage);
-    turtle.velocityX = -4;
-    turtle.scale = 0.1;
-    turtleGroup.add(turtle);
-  }
 }
